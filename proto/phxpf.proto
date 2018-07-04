@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+package phxpf;
+
+option cc_generic_services = false;
+
+service PhxPFServer {
+    rpc Filter (PhxPFOperator) returns (PhxPFResponse) {
+    }
+    rpc Update (PhxPFOperator) returns (PhxPFResponse) {
+    }
+    rpc Delete (PhxPFOperator) returns (PhxPFResponse) {
+    }
+    rpc FilterOne (PhxPFSingleOperator) returns (PhxPFSingleResponse) {
+    }
+    rpc UpdateOne (PhxPFSingleOperator) returns (PhxPFSingleResponse) {
+    }
+    rpc DeleteOne (PhxPFSingleOperator) returns (PhxPFSingleResponse) {
+    }
+    rpc IsMaster (google.protobuf.Empty) returns (PhxIAmMaster){
+    }
+}
+
+enum PhxPFOperatorType {
+    PHXPF_UNKNOWN = 0;
+    PHXPF_FILTER = 1;
+    PHXPF_UPDATE = 2;
+    PHXPF_DELETE = 3;
+    PHXPF_SINGLE_FILTER = 4;
+    PHXPF_SINGLE_UPDATE = 5;
+    PHXPF_SINGLE_DELETE = 6;
+}
+
+enum PhxPFRetType {
+    PHXPARTITIONFILTER_OK = 0;
+    PHXPARTITIONFILTER_SYS_FAIL = -1;
+    PHXPARTITIONFILTER_KEY_NOT_EXISTS = -2;
+
+    PHXPARTITIONFILTER_CLIENT_RETRY = -3;
+    PHXPARTITIONFILTER_REDIRECT = -4;
+
+    PHXPARTITIONFILTER_NOTMASTER = -5;
+}
+
+message PhxIAmMaster {
+    bool master = 1;
+}
+
+message PhxPFValue {
+    repeated string values = 1;
+}
+
+message PhxPFOperatorArgs {
+    string partition = 1;
+    PhxPFValue value = 2;       // filter=notin, update=data, delete=in
+}
+
+message PhxPFOperator {
+    PhxPFOperatorType operator = 1;
+    PhxPFOperatorArgs args = 2;
+};
+
+message PhxPFResponse {
+    int32 ret = 1;
+    string msg = 2;
+    PhxPFValue value = 3;
+};
+
+message PhxPFSingleOperatorArgs {
+    string partition = 1;
+    string value = 2;
+}
+
+message PhxPFSingleOperator {
+    PhxPFOperatorType operator = 1;
+    PhxPFSingleOperatorArgs args = 2;
+}
+
+message PhxPFSingleResponse {
+    int32 ret = 1;
+    string msg = 2;
+    bool value = 3;     //filter=in, update=success, delete=success
+}
+
+enum PhxMsgType {
+    MULTI = 0;
+    SINGLE = 1;
+
+    READY = 2;
+}
+
+message PhxPFMsg {
+    PhxMsgType vtype = 1;
+    bytes value = 2;
+}
