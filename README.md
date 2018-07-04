@@ -1,9 +1,9 @@
 # PhxPf
 
-PhxPf is a component of filter module for recommend system. the full name is "**phxpaxos partition filter**"
+PhxPf is a component of filter module for big data applications like recommend system. the full name is "**phxpaxos partition filter**"
 
 ## Why use PhxPf
-Build filter module for an recommend system quickly instead of thinking about memory and storage. And it's more safe. you can retrieve data had been consumed quickly in a million or tens of millions of partitioned data sets
+The original intention is to build filter module for an recommend system quickly instead of thinking about memory and storage. And it's more safe. you can retrieve data had been consumed quickly in a million or tens of millions of partitioned data sets
 
 ## Features
 1. less storage space.
