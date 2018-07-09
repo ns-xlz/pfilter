@@ -177,7 +177,7 @@ PartitionFilter::PartitionFilter(const PartitionFilterConfig &config)
         if (is_directory(*iter)) {
             continue;
         }
-        stat fileStat;
+        struct stat fileStat;
         if(lstat(iter->path().c_str(), &fileStat)<0) {
             continue;
         }

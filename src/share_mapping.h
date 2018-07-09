@@ -14,27 +14,27 @@
 #include <boost/interprocess/allocators/allocator.hpp>
 
 using namespace std;
-using namespace boost::interprocess;
-using namespace boost::filesystem;
+//using namespace boost::interprocess;
+//using namespace boost::filesystem;
 
 class SharedMapping : public boost::noncopyable {
 private:
     const string m_shareObjName;
-    file_mapping * m_mapping;
-    mapped_region * m_region;
+    boost::interprocess::file_mapping * m_mapping;
+    boost::interprocess::mapped_region * m_region;
 
     void * m_data;
-    offset_t m_size;
+    boost::interprocess::offset_t m_size;
     bool m_autoClose;
 public:
-    SharedMapping(string name, offset_t size, bool autoClose=false);
+    SharedMapping(string name, boost::interprocess::offset_t size, bool autoClose=false);
 
     void Clear();
-    offset_t Length() const;
+    boost::interprocess::offset_t Length() const;
     void * Data() const;
     const string Name() const;
-    file_mapping* Mapping() const;
-    mapped_region* Region() const;
+    boost::interprocess::file_mapping* Mapping() const;
+    boost::interprocess::mapped_region* Region() const;
 
     ~SharedMapping();
 };
