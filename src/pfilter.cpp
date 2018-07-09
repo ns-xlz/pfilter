@@ -177,6 +177,7 @@ PartitionFilter::PartitionFilter(const PartitionFilterConfig &config)
 //    boost::filesystem::path dir = boost::filesystem::path(m_bloomPath);
     DIR * _dir = opendir(m_bloomPath.c_str());
     if (_dir != nullptr) {
+        struct dirent *file;
         while((file = readdir(_dir)) != NULL)
         {
             if(strncmp(file->d_name, ".", 1) == 0) {
