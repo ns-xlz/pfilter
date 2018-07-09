@@ -10,6 +10,8 @@
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/filesystem.hpp>
 #include <functional>
+#include <sys/types.h>
+#include <dirent.h>
 
 using namespace boost::gregorian;
 using namespace boost::posix_time;
@@ -171,20 +173,28 @@ PartitionFilter::PartitionFilter(const PartitionFilterConfig &config)
     }
 
     vector<Partition> pm;
-    directory_iterator end;
-    boost::filesystem::path dir = boost::filesystem::path(m_bloomPath);
-    for (directory_iterator iter(dir); iter != end; ++iter) {
-        if (is_directory(*iter)) {
-            continue;
+//    directory_iterator end;
+
+//    boost::filesystem::path dir = boost::filesystem::path(m_bloomPath);
+    DIR * _dir = opendir(m_bloomPath.c_str());
+
+    if (_dir != nullptr) {
+        struct dirent *file;
+        struct stat sb;
+
+        while((file = readdir(_dir)) != NULL)
+        {
+            if(strncmp(file->d_name, ".", 1) == 0) {
+                continue;
+            }
+            if(stat(file->d_name, &sb) >= 0 && S_ISREG(sb.st_mode))
+            {
+                pm.push_back(DecodePath(file->d_name));
+            }
         }
-        struct stat fileStat;
-        if(lstat(iter->path().c_str(), &fileStat)<0) {
-            continue;
-        }
-        if (S_ISREG(fileStat.st_mode)) {
-            pm.push_back(DecodePath(iter->path().string()));
-        }
+        closedir(_dir);
     }
+    
     if (pm.size() > 0) {
         sort(pm.begin(), pm.end(), std::greater<Partition>());
         size_t maxsize = m_maxPartitionNum > pm.size() ? pm.size() : m_maxPartitionNum;
