@@ -24,6 +24,7 @@ bool PhxPartitionFilter::Init(const PartitionFilterConfig &config) {
     }
 
     m_pfilter = new PartitionFilter(config);
+    m_pfilter->Print();
     m_bHasInit = true;
     return true;
 }

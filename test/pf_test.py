@@ -7,7 +7,7 @@ from pftesttool import PfTestClient
 
 from phxpf_grpc import PfGrpcStandaloneClient
 
-rpc_addrs = ("127.0.0.1", 11264)
+rpc_addrs = ("0.0.0.0", 11264)
 
 
 class TestPf(unittest.TestCase):

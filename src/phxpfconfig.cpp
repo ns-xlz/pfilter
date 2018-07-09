@@ -21,9 +21,9 @@ bool PhxPartitionFilterNodeConfig::Read(const string & configFile) {
 
     m_logLevel = pt.get<int>("log_level", 0);
     m_maxLogSize = pt.get<int>("max_log_size", 128);
-    m_rpcAddr = pt.get<string>("rpc_addr", "127.0.0.1:12345");
+    m_rpcAddr = pt.get<string>("rpc_addr", "0.0.0.0:12345");
 
-    string mynode = pt.get<string>("nodeaddr", "127.0.0.1:22345");
+    string mynode = pt.get<string>("nodeaddr", "0.0.0.0:22345");
     vector<string> addr;
     boost::split(addr, mynode, boost::is_any_of(":,"), boost::token_compress_on);
     if (addr.size() != 2) {

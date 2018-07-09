@@ -121,7 +121,7 @@ You can start your server whih ```phxpf_sample_server``` or ```pf_sample_standal
 
 ```
 >> from phxpf_grpc import PfGrpcStandaloneClient
->> addr = ("127.0.0.1", "11264")
+>> addr = ("0.0.0.0", "11264")
 >> client = PfGrpcStandaloneClient(addr)
 >> data = [123, 456, 789]
 >> user_id = 123456789

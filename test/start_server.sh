@@ -11,7 +11,7 @@ fi
 ps -ef | grep $server | grep -v grep | grep -v $0 | awk '{print $2}' | xargs kill -15
 
 if [[ $nodenum == "1" ]];then
-    $server -c $dir/config/pfconfig$nodenum.json -b 127.0.0.1:11264 &
+    $server -c $dir/config/pfconfig$nodenum.json -b 0.0.0.0:11264 &
 else
     for i in `seq $nodenum`;do
         $server -c $dir/config/phxpf$i.json &

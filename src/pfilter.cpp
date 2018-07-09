@@ -177,7 +177,11 @@ PartitionFilter::PartitionFilter(const PartitionFilterConfig &config)
         if (is_directory(*iter)) {
             continue;
         }
-        if (is_regular_file(*iter)) {
+        stat fileStat;
+        if(lstat(iter->path().c_str(), &fileStat)<0) {
+            continue;
+        }
+        if (S_ISREG(fileStat.st_mode)) {
             pm.push_back(DecodePath(iter->path().string()));
         }
     }

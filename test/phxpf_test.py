@@ -8,7 +8,7 @@ from pftesttool import PfTestClient
 
 from phxpf_grpc import PhxPfGrpcClient
 
-rpc_addrs = [("127.0.0.1", 11261), ("127.0.0.1", 11262), ("127.0.0.1", 11263)]
+rpc_addrs = [("0.0.0.0", 11261), ("0.0.0.0", 11262), ("0.0.0.0", 11263)]
 
 
 class TestPhxPf(unittest.TestCase):

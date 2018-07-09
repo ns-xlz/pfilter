@@ -15,7 +15,7 @@ if __name__ == "__main__":
     batch_num = int(sys.argv[2])
     loop = int(sys.argv[3])
 
-    addr = ("127.0.0.1", "11264")
+    addr = ("0.0.0.0", "11264")
 
     ts = []
     baseid = random.randint(100000, 999999)

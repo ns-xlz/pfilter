@@ -70,9 +70,9 @@ def mk_phxpf_config(config_loc, phxlog_loc, syslog_loc, pfconf_file, index):
         "use_master": 1,
         "log_level": 3,
         "max_log_size": 128,  # m
-        "rpc_addr": "127.0.0.1:%d" % (11261 + int(index) - 1),
-        "nodeaddr": "127.0.0.1:%d" % (11111 + int(index) - 1),
-        "nodelist": "127.0.0.1:11111,127.0.0.1:11112,127.0.0.1:11113",
+        "rpc_addr": "0.0.0.0:%d" % (11261 + int(index) - 1),
+        "nodeaddr": "0.0.0.0:%d" % (11111 + int(index) - 1),
+        "nodelist": "0.0.0.0:11111,0.0.0.0:11112,0.0.0.0:11113",
         "paxos_log_path": check_create_dir(phxlog_loc, "phx%d" % int(index)),
         "sys_log_path": check_create_dir(syslog_loc, "log%d" % int(index)),
         "pf_config_file": pfconf_file,
