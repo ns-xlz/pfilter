@@ -20,6 +20,7 @@ PhxPartitionFilterNode::~PhxPartitionFilterNode() {
 int PhxPartitionFilterNode::RunPaxos(const PhxPartitionFilterNodeConfig &config) {
     m_batchSize = config.PaxosBatchSize();
     m_batchTimeoutMs = config.PaxosBatchTimeoutMs();
+    m_userMaster = config.PaxosUserMaster();
 
     m_mynode.SetIPPort(config.PaxosNodeInfo().o_ondeIp, config.PaxosNodeInfo().o_nodePort);
     bool succ = m_phxpfSm.Init(config.PFConfig());
@@ -53,7 +54,7 @@ int PhxPartitionFilterNode::RunPaxos(const PhxPartitionFilterNodeConfig &config)
     phxpaxos::GroupSMInfo smInfo;
     smInfo.iGroupIdx = GetGroupIdx();
     smInfo.vecSMList.push_back(&m_phxpfSm);
-    smInfo.bIsUseMaster = true;
+    smInfo.bIsUseMaster = m_userMaster;
     options.vecGroupSMInfoList.push_back(smInfo);
 
     int ret = LOGGER->Init("PHXPF", config.SysLogPath(), config.LogLevel(), config.MaxLogSize());
@@ -135,7 +136,7 @@ int PhxPartitionFilterNode::Filter(const phxpf::PhxPFOperator &op, phxpf::PhxPFR
 }
 
 int PhxPartitionFilterNode::Update(const phxpf::PhxPFOperator &op, phxpf::PhxPFResponse &response) {
-    if (m_paxosNode->IsIMMaster(GetGroupIdx())) {
+    if (IsMaster()) {
         return PFPropose(op, response);
     }
     response.set_ret(phxpf::PHXPARTITIONFILTER_REDIRECT);
@@ -143,7 +144,7 @@ int PhxPartitionFilterNode::Update(const phxpf::PhxPFOperator &op, phxpf::PhxPFR
 }
 
 int PhxPartitionFilterNode::Delete(const phxpf::PhxPFOperator &op, phxpf::PhxPFResponse &response) {
-    if (m_paxosNode->IsIMMaster(GetGroupIdx())) {
+    if (IsMaster()) {
         return PFPropose(op, response);
     }
     response.set_ret(phxpf::PHXPARTITIONFILTER_REDIRECT);
@@ -157,7 +158,7 @@ int PhxPartitionFilterNode::FilterOne(const phxpf::PhxPFSingleOperator &op, phxp
 }
 
 int PhxPartitionFilterNode::UpdateOne(const phxpf::PhxPFSingleOperator &op, phxpf::PhxPFSingleResponse &response) {
-    if (m_paxosNode->IsIMMaster(GetGroupIdx())) {
+    if (IsMaster()) {
         return PFPropose(op, response);
     }
     response.set_ret(phxpf::PHXPARTITIONFILTER_REDIRECT);
@@ -165,7 +166,7 @@ int PhxPartitionFilterNode::UpdateOne(const phxpf::PhxPFSingleOperator &op, phxp
 }
 
 int PhxPartitionFilterNode::DeleteOne(const phxpf::PhxPFSingleOperator &op, phxpf::PhxPFSingleResponse &response) {
-    if (m_paxosNode->IsIMMaster(GetGroupIdx())) {
+    if (IsMaster()) {
         return PFPropose(op, response);
     }
     response.set_ret(phxpf::PHXPARTITIONFILTER_REDIRECT);
@@ -184,5 +185,5 @@ bool PhxPartitionFilterNode::Ready(const string *msg) const {
 }
 
 bool PhxPartitionFilterNode::IsMaster() const {
-    return m_paxosNode->IsIMMaster(0);
+    return m_userMaster ? m_paxosNode->IsIMMaster(GetGroupIdx()) : true;
 }

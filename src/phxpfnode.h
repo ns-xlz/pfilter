@@ -18,6 +18,7 @@ private:
 
     int m_batchSize;
     int m_batchTimeoutMs;
+    bool m_userMaster;
 private:
     int PFPropose(const phxpf::PhxPFOperator & op, phxpf::PhxPFResponse &response);
     int PFPropose(const phxpf::PhxPFSingleOperator & op, phxpf::PhxPFSingleResponse &response);

@@ -67,6 +67,7 @@ def mk_phxpf_config(config_loc, phxlog_loc, syslog_loc, pfconf_file, index):
         "io_thread_count": 1,
         "batch_size": 1000,
         "batch_timeout_ms": 10,
+        "use_master": 1,
         "log_level": 3,
         "max_log_size": 128,  # m
         "rpc_addr": "127.0.0.1:%d" % (11261 + int(index) - 1),

@@ -17,6 +17,7 @@ bool PhxPartitionFilterNodeConfig::Read(const string & configFile) {
     m_paxosIoThreadCnt = pt.get<int>("io_thread_count", 4);
     m_paxosBatchSize = pt.get<int>("batch_size", 10);
     m_paxosBatchTimeoutMs = pt.get<int>("batch_timeout_ms", 10);
+    m_paxosUseMaster = pt.get<int>("user_master", 0) != 0;
 
     m_logLevel = pt.get<int>("log_level", 0);
     m_maxLogSize = pt.get<int>("max_log_size", 128);
@@ -63,6 +64,10 @@ const Node& PhxPartitionFilterNodeConfig::PaxosNodeInfo() const {
 
 const string& PhxPartitionFilterNodeConfig::PaxosLogPath() const {
     return m_paxosLogPath;
+}
+
+bool PhxPartitionFilterNodeConfig::PaxosUserMaster() const {
+    return m_paxosUseMaster;
 }
 
 const vector<Node>& PhxPartitionFilterNodeConfig::PaxosNodeListInfo() const {

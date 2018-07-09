@@ -17,6 +17,7 @@ private:
     int m_paxosIoThreadCnt;
     int m_paxosBatchSize;
     int m_paxosBatchTimeoutMs;
+    bool m_paxosUseMaster;
 
     int m_logLevel;
     int m_maxLogSize; // mb
@@ -33,6 +34,7 @@ public:
     int PaxosIoThreadCount() const;
     int PaxosBatchSize() const;
     int PaxosBatchTimeoutMs() const;
+    bool PaxosUserMaster() const;
 
     const Node & PaxosNodeInfo() const;
     const vector<Node> & PaxosNodeListInfo() const;
